@@ -91,7 +91,12 @@ export default {
             data: this.form
           }).then(res => {
             // console.log(res.data.meta.msg);
+            console.log(res.data);
             if (res.data.meta.status === 200) {
+              // 登录成功之后，服务器端会返回给我们一个token
+              // 我们需要将这个token保存到本地
+              // 保存到localstorage中就可以
+              localStorage.setItem("token", res.data.token);
               this.$router.push("/home");
             }
           });
