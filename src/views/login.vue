@@ -96,7 +96,7 @@ export default {
               // 登录成功之后，服务器端会返回给我们一个token
               // 我们需要将这个token保存到本地
               // 保存到localstorage中就可以
-              localStorage.setItem("token", res.data.token);
+              localStorage.setItem("token", res.data.data.token);
               this.$router.push("/home");
             }
           });
