@@ -77,30 +77,34 @@ export default {
     };
   },
   methods: {
-    async submitForm(formName) {
-      let valid = await this.$refs[formName].validate();
-      if (valid) {
-        try {
-          let res = await axios({
+    submitForm(formName) {
+      // this.$refs['loginForm'] 这个就获取到了表单对象
+      // 通过调用这个对象的validate方法，就可以对表单做整体校验
+      // validate函数接收的参数是一个函数
+      this.$refs[formName].validate(valid => {
+        // valid形参，接收到的就是表单的校验结果
+        // 如果表单校验成功则是 true  如果不成功则是false
+        if (valid) {
+          axios({
             url: "http://localhost:8888/api/private/v1/login",
             method: "post",
             data: this.form
+          }).then(res => {
+            // console.log(res.data.meta.msg);
+            console.log(res.data);
+            if (res.data.meta.status === 200) {
+              // 登录成功之后，服务器端会返回给我们一个token
+              // 我们需要将这个token保存到本地
+              // 保存到localstorage中就可以
+              localStorage.setItem("token", res.data.data.token);
+              this.$router.push("/home");
+            }
           });
-          console.log(res);
-          if (res.data.meta.status === 200) {
-            localStorage.setItem("token", res.data.data.token);
-            this.$router.push("/home");
-          } else {
-            this.$message({
-              message: res.data.meta.msg,
-              type: "error",
-              duration: 500
-            });
-          }
-        } catch (error) {}
-      } else {
-        return false;
-      }
+        } else {
+          // console.log('error submit!!');
+          return false;
+        }
+      });
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
