@@ -19,7 +19,7 @@
         </el-form-item>
 
         <el-form-item label="密码" prop="password">
-          <el-input v-model="form.password"></el-input>
+          <el-input type="password" show-password v-model="form.password"></el-input>
         </el-form-item>
 
         <el-form-item>
