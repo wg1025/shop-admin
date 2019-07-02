@@ -85,10 +85,9 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="isAddUserDialogShow= false">取 消</el-button>
-        <el-button type="primary" @click="editUser ">确 定</el-button>
+        <el-button type="primary" @click="addUser">确 定</el-button>
       </div>
     </el-dialog>
-
     <!-- 修改用户信息的模态框 -->
 
     <el-dialog title="添加用户" :visible.sync="iseditDialogShow">
@@ -202,11 +201,11 @@ export default {
           query: this.keyword,
           pagenum: this.currentpage,
           pagesize: this.pagesize
-        },
-        //   github  axios   header
-        headers: {
-          Authorization: localStorage.getItem("token")
         }
+        //   github  axios   header
+        // headers: {
+        //   Authorization: localStorage.getItem("token")
+        // }
       }).then(res => {
         // console.log(res);
         this.userList = res.data.data.users;
@@ -220,16 +219,17 @@ export default {
     },
     search() {
       console.log(this.keyword);
+      this.currentpage = 1;
       this.getUserList();
     },
     async toggleStatus(user) {
       // console.log(users);
       let res = await axios({
         url: `http://localhost:8888/api/private/v1/users/${user.id}/state/${user.mg_state}`,
-        method: "put",
-        headers: {
-          Authorization: localStorage.getItem("token")
-        }
+        method: "put"
+        // headers: {
+        //   Authorization: localStorage.getItem("token")
+        // }
       });
       console.log(res);
       if (res.data.meta.status === 200) {
@@ -256,10 +256,10 @@ export default {
         });
         let res = await axios({
           url: `http://localhost:8888/api/private/v1/users/${id}`,
-          method: "delete",
-          headers: {
-            Authorization: localStorage.getItem("token")
-          }
+          method: "delete"
+          // headers: {
+          //   Authorization: localStorage.getItem("token")
+          // }
         });
         console.log(res);
         if (res.data.meta.status === 200) {
@@ -281,7 +281,8 @@ export default {
     openAddUserDialog() {
       this.isAddUserDialogShow = true;
     },
-    async editUser() {
+
+    async addUser() {
       // 1.进行表单效验
       try {
         let valid = await this.$refs.ruleForm.validate();
@@ -290,10 +291,10 @@ export default {
         let res = await axios({
           url: "http://localhost:8888/api/private/v1/users",
           method: "post",
-          data: this.addUserData,
-          headers: {
-            Authorization: localStorage.getItem("token")
-          }
+          data: this.addUserData
+          // headers: {
+          //   Authorization: localStorage.getItem("token")
+          // }
         });
         console.log(res);
         if (res.data.meta.status === 201) {
@@ -314,18 +315,18 @@ export default {
           });
         }
       } catch (err) {}
-      // this.isAddUserDialogShow = false;
+      this.isAddUserDialogShow = false;
     },
     async openEditUserDialog(id) {
       this.iseditDialogShow = true;
       // 使用id去后台拿取数据
       let res = await axios({
         url: `http://localhost:8888/api/private/v1/users/${id}`,
-        method: "get",
+        method: "get"
         // data: this.editUserData,
-        headers: {
-          Authorization: localStorage.getItem("token")
-        }
+        // headers: {
+        //   Authorization: localStorage.getItem("token")
+        // }
       });
       console.log(res);
       this.editUserData = res.data.data;
@@ -340,10 +341,10 @@ export default {
           data: {
             mobile: this.editUserData.mobile,
             email: this.editUserData.email
-          },
-          headers: {
-            Authorization: localStorage.getItem("token")
           }
+          // headers: {
+          //   Authorization: localStorage.getItem("token")
+          // }
         });
         console.log(res);
         if (res.data.meta.status === 200) {

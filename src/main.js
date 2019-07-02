@@ -1,7 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
-// import axios from "axios";
+import axios from "axios";
 //  1. 引入ElemnetUI库
 import ElementUI from "element-ui";
 // 2.引入css文件
@@ -15,6 +15,19 @@ Vue.use(ElementUI);
 // 解决axios每次调用问题
 /* 把axios加到vue原型上 */
 // Vue.Prototype.$http = axios;
+
+// 怎样解决集地址问题  每次都要写集地址?
+axios.defaults.baseURL = "http://localhost:8888/api/private/v1/";
+
+// 设置axios的请求拦截器
+axios.interceptors.request.use(function (config) {
+  // config 就是拦截到的请求相关的所有的信息
+  // 这个信息是可以进行修改的
+  // console.log(config);
+  config.headers.Authorization = localStorage.getItem("token");
+  // return config不能动，这个函数中必须有这个内容
+  return config;
+});
 
 Vue.config.productionTip = false;
 

@@ -9,4 +9,17 @@
       import axios "axios"
 
 3.怎样解决集地址问题  每次都要写集地址?
-在main.js中 axios.defaults.baseURL="集地址"
+
+    在main.js中 axios.defaults.baseURL="集地址"
+
+4.怎么样解决headers问题  每次都要写headers问题?
+
+在github  里   搜 axios     interceports
+
+请求拦截器               项目里headers{}都可以删除
+  axios.interceptors.request.use(function (config) {
+  config.headers.Authorization=localStorage.getItem("token")
+    return config;
+  }
+
+  5.插值表达式可以使用filter过滤器   组件中不能使用filter过滤器
