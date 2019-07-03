@@ -150,16 +150,14 @@ export default {
       let level3Ids = [];
       // // 获取二级权限的id，组合成数组
       row.children.forEach(level1 => {
-        level1Ids.push(level1.id);
         level1.children.forEach(level2 => {
-          level2Ids.push(level2.id);
           level2.children.forEach(level3 => {
             level3Ids.push(level3.id);
           });
         });
       });
       console.log(level1Ids);
-      this.checkedRights = [...level1Ids, ...level2Ids, ...level3Ids];
+      this.checkedRights = [...level3Ids];
     },
     async getRolesList() {
       let res = await axios({
