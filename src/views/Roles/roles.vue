@@ -5,20 +5,24 @@
       <el-breadcrumb-item>用户管理</el-breadcrumb-item>
       <el-breadcrumb-item>用户列表</el-breadcrumb-item>
     </el-breadcrumb>
-    <el-table :data="rolesList" stripe style="width: 100%">
+    <el-table :data="rolesList" stripe style="width: 100%" ref="roleTable">
       <el-table-column type="expand">
         <template v-slot="{row}">
           <!-- 一级菜单行元素 -->
           <el-row class="level1" type="flex" v-for="level1 in row.children" :key="level1.id">
             <el-col :span="6">
-              <el-tag closable>{{level1.authName}}</el-tag>
+              <el-tag closable @close="deleteRight(row,level1.id)">{{level1.authName}}</el-tag>
               <i class="el-icon-arrow-right"></i>
             </el-col>
             <el-col>
               <!-- 二级菜单行元素 -->
               <el-row class="level2" type="flex" v-for="level2 in level1.children" :key="level2.id">
                 <el-col :span="6">
-                  <el-tag closable type="success">{{level2.authName}}</el-tag>
+                  <el-tag
+                    closable
+                    type="success"
+                    @close="deleteRight(row,level2.id)"
+                  >{{level2.authName}}</el-tag>
                   <i class="el-icon-arrow-right"></i>
                 </el-col>
                 <el-col>
@@ -28,6 +32,7 @@
                     type="warning"
                     v-for="level3 in level2.children"
                     :key="level3.id"
+                    @close="deleteRight(row,level3.id)"
                   >{{level3.authName}}</el-tag>
                   <i class="el-icon-arrow-right"></i>
                 </el-col>
@@ -103,6 +108,33 @@ export default {
   },
 
   methods: {
+    async deleteRight(row, id) {
+      // console.log(row, id);
+      // 接口信息
+      //  roles/:id/rights/:rightID
+      // method: delete
+      let res = await axios({
+        url: `roles/${row.id}/rights/${id}`,
+        method: "delete"
+      });
+      console.log(res);
+      if (res.data.meta.status === 200) {
+        this.$message({
+          type: "success",
+          message: res.data.meta.msg,
+          duration: 1000
+        });
+        this.getRolesList(() => {
+          this.$nextTick(() => {
+            //让表格对应的项展开即可
+            this.$refs.roleTable.toggleRowExpansion(
+              this.roleList.find(v => v.id == row.id),
+              true
+            );
+          });
+        });
+      }
+    },
     async updataRolesRights() {
       // 1.获取到当前tree中  所有被勾选的节点id
       // element-UI  提供
