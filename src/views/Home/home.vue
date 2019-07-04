@@ -60,7 +60,6 @@ export default {
     let res = await axios({
       url: "menus"
     });
-    console.log(res);
     this.menusList = res.data.data;
   },
   methods: {
