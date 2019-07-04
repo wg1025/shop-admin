@@ -74,13 +74,49 @@ export default {
             trigger: "change"
           }
         ]
-      }
+      },
+      distribution: {
+        username: "",
+        rid: ""
+      },
+      roleList: [],
+      dialogFormVisible: false
     };
   },
   created() {
     this.getUserList();
   },
   methods: {
+    async addRolesDialog(row) {
+      let res = await axios({
+        url: `users/${row.id}`
+      });
+      // console.log(res)
+      this.distribution = res.data.data;
+      let roleResult = await axios({
+        url: "roles"
+      });
+
+      this.roleList = roleResult.data.data;
+      this.dialogFormVisible = true;
+    },
+    async updateRole() {
+      let res = await axios({
+        url: `users/${this.distribution.id}/role`,
+        method: "put",
+        data: {
+          rid: this.distribution.rid
+        }
+      });
+      if (res.data.meta.status === 200) {
+        this.$message({
+          type: "success",
+          message: res.data.meta.msg,
+          duration: 1000
+        });
+      }
+      this.dialogFormVisible = false;
+    },
     getUserList() {
       axios({
         url: "http://localhost:8888/api/private/v1/users",

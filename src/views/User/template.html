@@ -32,7 +32,7 @@
       <template v-slot="{row}">
         <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="openEditUserDialog(row.id)"></el-button>
         <el-button type="danger" icon="el-icon-delete" plain circle size="mini" @click="delUser(row.id)"></el-button>
-        <el-button type="success" icon="el-icon-check" size="mini" plain>角色权限</el-button>
+        <el-button type="success" icon="el-icon-check" size="mini" plain @click='addRolesDialog(row)'>角色权限</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -81,21 +81,22 @@
   </el-dialog>
 
   <!-- 显示分配权限的莫太宽模态框 -->
-  <!-- <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-    <el-form :model="form">
-      <el-form-item label="活动名称" :label-width="formLabelWidth">
-        <el-input v-model="form.name" autocomplete="off"></el-input>
+  <el-dialog title="分配角色" :visible.sync="dialogFormVisible">
+    <el-form :model="distribution" label-width="100px">
+      <el-form-item label="用户名" prop='username'>
+        <el-tag type="info" v-text='distribution.username'></el-tag>
       </el-form-item>
-      <el-form-item label="活动区域" :label-width="formLabelWidth">
-        <el-select v-model="form.region" placeholder="请选择活动区域">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
+      <el-form-item label="角色">
+        <el-select placeholder="请选择角色" v-model='distribution.rid'>
+          <el-option v-for="item in roleList" :value='item.id' :key='item.id' :label="item.roleName">
+          </el-option>
         </el-select>
       </el-form-item>
+
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      <el-button type="primary" @click="updateRole">确 定</el-button>
     </div>
-  </el-dialog> -->
+  </el-dialog>
 </div>
