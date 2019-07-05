@@ -54,10 +54,11 @@
     <!-- 添加用户的模态框 -->
     <el-dialog title="添加分类" :visible.sync="isShowAddCateDialog">
       <el-form ref="addCateForm" :model="addCateFormData" label-width="100px">
-        <el-form-item label="分类名称">
+        <!-- 清空表单里的内容   加 prop -->
+        <el-form-item label="分类名称" prop="cat_name">
           <el-input autocomplete="off" v-model="addCateFormData.cat_name"></el-input>
         </el-form-item>
-        <el-form-item label="父级名称">
+        <el-form-item label="父级名称" prop="parentArr">
           <el-cascader
             v-model="addCateFormData.parentArr"
             :options="cateOptions"

@@ -93,7 +93,7 @@ export default {
         goods_weight: 0,
         goods_instroduce: "",
         pics: [],
-        is_promote: 0
+        is_promote: "0"
       },
       cateOpation: [],
       defaultProps: {
@@ -116,7 +116,7 @@ export default {
     onFileUpLoadSuccess(res) {
       // console.log(res);
       this.addGoodsFormData.pics.push({
-        pic: res.data.data.tmp_path
+        pic: res.data.tmp_path
       });
     },
     next(index, activeName) {
@@ -127,7 +127,26 @@ export default {
       console.log(tab);
       this.activeStep = +tab.index;
     },
-    addDoods() {}
+    async addDoods() {
+      let newGoods = {
+        goods_cat: this.addGoodsFormData.catArr.join(),
+        goods_name: this.addGoodsFormData.goods_name,
+        goods_price: this.addGoodsFormData.goods_price,
+        goods_number: this.addGoodsFormData.goods_number,
+        goods_weight: this.addGoodsFormData.goods_weight,
+        goods_introduce: this.addGoodsFormData.goods_introduce,
+        pics: this.addGoodsFormData.pics,
+        is_promote: this.addGoodsFormData.is_promote
+      };
+      let res = await axios({
+        url: "goods",
+        method: "post",
+        data: newGoods
+      });
+      if (res.data.meta.status == 201) {
+        this.$router.push("/goods");
+      }
+    }
   }
 };
 </script>
@@ -137,5 +156,8 @@ export default {
 }
 .el-form {
   height: 100%;
+}
+.ql-container {
+  height: 200px;
 }
 </style>

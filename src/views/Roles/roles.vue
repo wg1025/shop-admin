@@ -49,7 +49,14 @@
       <el-table-column label="操作">
         <template v-slot="{row}">
           <el-button type="primary" size="mini" plain icon="el-icon-edit"></el-button>
-          <el-button type="danger" icon="el-icon-delete" plain circle size="mini"></el-button>
+          <el-button
+            type="danger"
+            icon="el-icon-delete"
+            plain
+            circle
+            size="mini"
+            @click="delUser(row.id)"
+          ></el-button>
           <el-button
             type="success"
             icon="el-icon-check"
@@ -108,6 +115,28 @@ export default {
   },
 
   methods: {
+    async delUser(id) {
+      console.log(111);
+      await this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      });
+      let res = await axios({
+        url: `roles/${id}`,
+        method: "delete"
+      });
+      console.log(res);
+      if (res.data.meta.status === 200) {
+        this.$message({
+          type: "success",
+          message: res.data.meta.msg,
+          duration: 1000
+        });
+
+        this.getUserList();
+      }
+    },
     async deleteRight(row, id) {
       // console.log(row, id);
       // 接口信息

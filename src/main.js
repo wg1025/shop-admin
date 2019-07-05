@@ -11,7 +11,6 @@ import "./assets/css/index.css";
 
 // 3. 安装ElementUI
 Vue.use(ElementUI);
-
 // 解决axios每次调用问题
 /* 把axios加到vue原型上 */
 // Vue.Prototype.$http = axios;
@@ -28,7 +27,13 @@ axios.interceptors.request.use(function (config) {
   // return config不能动，这个函数中必须有这个内容
   return config;
 });
-
+//  设置axios的响应拦截奇
+axios.interceptors.response.use(function (response) {
+  if (response.data.meta.status === 401) {
+    router.push("/login");
+  }
+  return response;
+});
 Vue.config.productionTip = false;
 
 // 这册一个导航守卫
