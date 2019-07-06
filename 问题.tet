@@ -4,7 +4,8 @@
 
 2.解决每次导入axios问题?
  
- 在main.js中将axios添加到vue的原型上   然后在导入axios     这样 axios只要在vue实例中都可以访问  把所有的axios换成this.$http
+ 在main.js中将axios添加到vue的原型上   然后在导入axios     
+ 这样 axios只要在vue实例中都可以访问  把所有的axios换成this.$http
       Vue.prototype.$htttp=axios  
       import axios "axios"
 
